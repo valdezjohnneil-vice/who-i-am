@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My World</title>
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #0f0f13;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-purple: #b026ff;
+            --accent-blue: #00d4ff;
+            --accent-pink: #ff0055;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- BACKGROUND ANIMATION --- */
+        .background-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 10% 20%, rgba(176, 38, 255, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(0, 212, 255, 0.15) 0%, transparent 40%);
+            animation: pulseBg 10s infinite alternate;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* --- LAYOUT UTILITIES --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+            min-height: 80vh; /* Takes up most of the screen */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            font-size: 2rem;
+            color: var(--accent-blue);
+        }
+
+        /* --- GLASSMORPHISM CARDS --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+            border-color: var(--accent-blue);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent-purple);
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .tag {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+        }
+
+        /* --- ABOUT SECTION --- */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-stats {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .stat-box {
+            text-align: center;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-pink);
+        }
+
+        /* --- ANIMATIONS (Scroll Reveal) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+        }
+
+        /* --- KEYFRAMES --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
+            40% {transform: translateY(-10px) translateX(-50%);}
+            60% {transform: translateY(-5px) translateX(-50%);}
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .about-content { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Animated Background -->
+    <div class="background-gradient"></div>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <h1>Hi, I'm <span style="color: var(--accent-blue)">Neil</span></h1>
+            <p>Who i am ?</p>
+        </div>
+        <div class="scroll-down">↓</div>
+    </section>
+
+    <!-- ABOUT ME SECTION -->
+    <section id="about">
+        <div class="container">
+            <h2 class="reveal">About Me</h2>
+            <div class="about-content reveal">
+                <div class="about-text">
+                    <p>
+                       Hi, I’m Neil. I’m just a simple person who wants to learn as much as I can about the world and continue shaping who I am. I love many things, and I enjoy exploring whatever sparks my curiosity.whether it’s music, art, technology, sports, and many other interests. I’ve always had a deep desire to discover new ideas and experiences. Learning new things excites me and helps me grow as a person.
+                    </p>
+                    <br>
+                    <p>
+                        I built this website to showcase the things that inspire me.
+                    </p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-box">
+                        <div class="stat-number">5+</div>
+                        <div>Years Gaming</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">100+</div>
+                        <div>Albums</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">24/7</div>
+                        <div>Music</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MUSIC SECTION -->
+    <section id="music">
+        <div class="container">
+            <h2 class="reveal">My Music Playlist</h2>
+            <div class="grid-container">
+                <!-- Music Card 1 -->
+                <div class="card reveal">
+                    <h3>Smells Like a Teen Spirit</h3>
+                    <p>Artist: Nirvana</p>
+                    <p>Why I love it: Song captures a feeling of rebellion, freedom, and honesty.</p>
+                    <span class="tag">Grunge</span>
+                </div>
+                <!-- Music Card 2 -->
+                <div class="card reveal">
+                    <h3>Lonely in the Crowd</h3>
+                    <p>Artist: Neil</p>
+                    <p>Why I love it: Of course my own song that captures freedom of anything.</p>
+                    <span class="tag">Alternative Rock</span>
+                </div>
+                <!-- Music Card 3 -->
+                <div class="card reveal">
+                    <h3>All Out of Love</h3>
+                    <p>Artist: Air Supply</p>
+                    <p>Why I love it: The first song I heard in this world when I was born.</p>
+                    <span class="tag">Soft Rock</span>
+                </div>
+                <!-- Music Card 4 -->
+                <div class="card reveal">
+                    <h3>ILYSB</h3>
+                    <p>Artist: LANY</p>
+                    <p>Why I love it: A song where I discovered the meaning of love for me.</p>
+                    <span class="tag">Indie Pop/Synth-pop</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIDEO GAMES SECTION -->
+    <section id="games">
+        <div class="container">
+            <h2 class="reveal">My Game Library</h2>
+            <div class="grid-container">
+                <!-- Game Card 1 -->
+                <div class="card reveal">
+                    <h3>Valorant</h3>
+                    <p>Genre: FPS</p>
+                    <p>Platform: PC/Xbox/PS</p>
+                    <p>My thoughts: Do you want to ruin your life? Play this.</p>
+                    <span class="tag">Depression</span>
+                </div>
+                <!-- Game Card 2 -->
+                <div class="card reveal">
+                    <h3>Assassin's Creed IV: Black Flag</h3>
+                    <p>Genre: Action/Adventure</p>
+                    <p>Platform: PC</p>
+                    <p>My thoughts: OG of all ASCD, nostalgic for me.</p>
+                    <span class="tag">His-Fi</span>
+                </div>
+                <!-- Game Card 3 -->
+                <div class="card reveal">
+                    <h3>PUBG M/PC</h3>
+                    <p>Genre: Battle royale shooter</p>
+                    <p>Platform: PC/IOS</p>
+                    <p>My thoughts: In this game,I could already go to pro-scenes,2023 LB rank#1 in APAC Server</p>
+                    <span class="tag">Action</span>
+                </div>
+                <!-- Game Card 4 -->
+                <div class="card reveal">
+                    <h3>Call of Duty: Warzone</h3>
+                    <p>Genre: Battle Royale, First-Person Shooter (FPS)</p>
+                    <p>Platform: PC</p>
+                    <p>My thoughts: If you want to experience what it’s like to be in a real war, try this.</p>
+                    <span class="tag">Competitive</span>
+                </div>
+            </div>
+        </div>
+    </section>
+      
+    <section id="games">
+        <div class="container">
+            <h2 class="reveal">Hobbies & Interests</h2>
+            <div class="grid-container">
+                <!-- Game Card 1 -->
+                <div class="card reveal">
+                    <h3>Instruments</h3>
+                   <p>I love playing any instrument because it’s where I can pour out all of my unsaid feelings. But most of all, I love playing the guitar. Through the guitar, I discovered how much I truly love music. It also led me to start joining different bands before and creating my own songs using this instrument.  </p>
+                    
+                    <span class="tag">Music</span>
+                </div>
+                <!-- Game Card 2 -->
+                <div class="card reveal">
+                    <h3>Sketching & Charcoal</h3>
+                    <p>Drawing is one of the things I’ve loved doing since I was a child. It helped shape my interest in the world of architecture, especially in drawing and design. I love using charcoal in my artworks. Because of drawing, I was able to receive different certificates from the programs and events I joined.</p>
+                    <span class="tag">Arts</span>
+                </div>
+                <!-- Game Card 3 -->
+                <div class="card reveal">
+                    <h3>Languages</h3>
+                    <p>During the 2020 pandemic, I became fascinated with studying different languages, and until now I am still continuing to learn. I can speak a little Spanish, Japanese, Korean, and Thai. Out of all those languages, I became most interested in learning Thai because I had a relationship with a Thai person.</p>
+                    <span class="tag">Culture</span>
+                </div>
+                <!-- Game Card 4 -->
+                <div class="card reveal">
+                    <h3>Traveling</h3>
+                    <p>Out of all my hobbies and interests, this is the one I most want to fully pursue as who I am. I’ve always loved going anywhere since I was a child,meeting different people, trying various foods, learning about cultures, and more. And of course, through traveling, I feel a sense of freedom and peace that I can’t find anywhere else. </p>
+                    <span class="tag">Exploration</span>
+                </div>
+                <div class="card reveal">
+                    <h3>Books</h3>
+                   <p>I love reading books, especially those that challenge the imagination and explore unique perspectives, such as modernist fiction, surrealism, and absurdist fiction by "franz kafka". These genres allow me to dive into worlds that are unconventional, thought-provoking, and often filled with symbolic meaning. I enjoy how they play with language, structure, and reality, making me think differently about life, society, and human nature.</p>
+                    <span class="tag">Literature</span>
+                </div>
+                <div class="card reveal">
+                    <h3>Sports</h3>
+                  <p>Sports are important to me because it’s in my blood. I was born into a family deeply involved in sports,my father is a footballer and basketball player, and my mother is a volleyball and softball player. So I can’t deny that I grew up as a sporty person. I love all kinds of sports, but there is one sport that shaped me and helped me truly discover myself, and that sport is football.</p>
+                    <span class="tag">Fitness</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; <span id="year"></span> NEIL. All rights reserved.</p>
+        <p style="font-size: 0.8rem; margin-top: 10px;"></p>
+    </footer>
+
+    <!-- JAVASCRIPT FOR EFFECTS -->
+    <script>
+        // 1. Dynamic Year in Footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // 2. Scroll Reveal Animation
+        // This checks if an element is in the viewport and adds the 'active' class
+        window.addEventListener('scroll', reveal);
+
+        function reveal() {
+            var reveals = document.querySelectorAll('.reveal');
+
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150; // Distance from bottom to trigger
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                } else {
+                    // Optional: remove this else block if you want it to stay visible once revealed
+                    reveals[i].classList.remove('active');
+                }
+            }
+        }
+        
+        // Trigger once on load
+        reveal();
+    </script>
+</body>
+</html>
